@@ -2,6 +2,7 @@
 #include <glad/gl.h>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+#include <imgui.h>
 //
 #include "config.h"
 
@@ -26,7 +27,6 @@ int main()
     glfwMakeContextCurrent(window);
     
     gladLoadGL(glfwGetProcAddress);
-    // gladLoadGLLoader(glfwGetProcAddress);
     glfwSwapInterval(1);
 
     while(!glfwWindowShouldClose(window)){
