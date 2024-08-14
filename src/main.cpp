@@ -10,6 +10,7 @@ int main()
     std::cout << "make FIVE" << std::endl;
     std::cout << "make SIX" << std::endl;
     std::cout << "make GLFW" << std::endl;
+    std::cout << "make GLFW succ" << std::endl;
     initConfig();
     while (1);
     return 0;
