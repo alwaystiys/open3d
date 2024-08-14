@@ -17,9 +17,12 @@ file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/
 add_executable(${CMAKE_PROJECT_NAME})
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${MY_SOURCES})
 # add_executable(${PROJECT_NAME} src/main.cpp)
+
+
 # add include directory
-target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include)
+target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-
+target_link_libraries("${CMAKE_PROJECT_NAME}" PRIVATE glfw)
+	# glad stb_image stb_truetype imgui)
 
          
