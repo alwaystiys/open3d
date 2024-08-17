@@ -5,8 +5,10 @@
 #include <imgui.h>
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+// #include "imgui-style.h"
 //
 #include "config.h"
+// float highDPIscaleFactor = 1.0;
 
 static void ShowDockingDisabledMessage()
 {
@@ -44,8 +46,8 @@ void showWindowCenter(GLFWwindow *window, GLFWmonitor *monitor)
     glfwShowWindow(window);
 }
 
-
-void createHostWindow(){
+void createHostWindow()
+{
     static bool opt_fullscreen = true;
     static bool opt_padding = true;
     static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
@@ -55,7 +57,7 @@ void createHostWindow(){
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
     if (opt_fullscreen)
     {
-        const ImGuiViewport* viewport = ImGui::GetMainViewport();
+        const ImGuiViewport *viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
         ImGui::SetNextWindowSize(viewport->WorkSize);
         ImGui::SetNextWindowViewport(viewport->ID);
@@ -89,7 +91,7 @@ void createHostWindow(){
         ImGui::PopStyleVar(2);
 
     // Submit the DockSpace
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO &io = ImGui::GetIO();
     if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
     {
 
@@ -102,11 +104,10 @@ void createHostWindow(){
         ShowDockingDisabledMessage();
     }
     ImGui::End();
-
 }
 
-
-void showMainMenuBar(){
+void showMainMenuBar()
+{
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("文件"))
@@ -116,16 +117,72 @@ void showMainMenuBar(){
         }
         if (ImGui::BeginMenu("编辑"))
         {
-            if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
+            if (ImGui::MenuItem("Undo", "CTRL+Z"))
+            {
+            }
+            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false))
+            {
+            } // Disabled item
             ImGui::Separator();
-            if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-            if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-            if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+            if (ImGui::MenuItem("Cut", "CTRL+X"))
+            {
+            }
+            if (ImGui::MenuItem("Copy", "CTRL+C"))
+            {
+            }
+            if (ImGui::MenuItem("Paste", "CTRL+V"))
+            {
+            }
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
     }
+}
+
+void monitor_callback(GLFWmonitor *monitor, int event)
+{
+    if (event == GLFW_CONNECTED)
+    {
+        std::cout << "The monitor was connected" << std::endl;
+    }
+    else if (event == GLFW_DISCONNECTED)
+    {
+        std::cout << "The monitor was disconnected" << std::endl;
+    }
+}
+
+void window_content_scale_callback(GLFWwindow *window, float xscale, float yscale)
+{
+    std::cout << "window_content_scale_callback " << xscale << " " << yscale << std::endl;
+    //     // setImGuiStyle(0.5f);
+    // std::cout << "window_content_scale_callback "
+    // << ImGui::GetIO().DisplayFramebufferScale.x << " "
+    // << ImGui::GetIO().DisplayFramebufferScale.y << std::endl;
+    // if(xscale > 1){
+    //     highDPIscaleFactor = xscale;
+    //     ImGui::GetIO().FontGlobalScale = highDPIscaleFactor;
+    // }else{
+    //     ImGui::GetIO().FontGlobalScale = 1.0f;
+    //     highDPIscaleFactor = 1.0f;
+    // }
+    // ImGui::GetIO().FontGlobalScale = 1.0f;
+}
+
+void framebuffer_size_callback(GLFWwindow *window, int width, int height)
+{
+    int windowWidth, windowHeight;
+    glfwGetWindowSize(window, &windowWidth, &windowHeight);
+    std::cout << "framebuffer_size_callback: " << windowWidth << " xxxwindowHeight: " << windowHeight << std::endl;
+}
+
+void windowRefreshFun(GLFWwindow *window)
+{
+    // std::cout << "windowRefreshFun" << std::endl;
+}
+
+void resize_window_callback(GLFWwindow *glfw_window, int x, int y)
+{
+    std::cout << "resize_window_callback" << std::endl;
 }
 
 int main()
@@ -138,8 +195,21 @@ int main()
     // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-    GLFWwindow *window = glfwCreateWindow(1920, 1080, "Open3D", NULL, NULL);
+
+    GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+    float xscale, yscale;
+    glfwGetMonitorContentScale(monitor, &xscale, &yscale);
+    std::cout << "[INFO] Monitor scale: " << xscale << "x" << yscale << std::endl;
+
+    // if (xscale > 1 || yscale > 1)
+    // {
+    //     highDPIscaleFactor = xscale;
+    //     glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+    // }
+    glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+    GLFWwindow *window = glfwCreateWindow(880, 480, "Open3D", NULL, NULL);
     if (!window)
     {
         std::cout << "window init failed" << std::endl;
@@ -147,9 +217,13 @@ int main()
         return -1;
     }
 
-    GLFWmonitor *monitor = glfwGetPrimaryMonitor();
-    showWindowCenter(window, monitor);
+    glfwSetWindowRefreshCallback(window, windowRefreshFun);
+    glfwSetWindowContentScaleCallback(window, window_content_scale_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetMonitorCallback(monitor_callback);
+    glfwSetWindowSizeCallback(window, resize_window_callback);
 
+    showWindowCenter(window, monitor);
     glfwMakeContextCurrent(window);
 
     gladLoadGL(glfwGetProcAddress);
@@ -159,13 +233,16 @@ int main()
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
     (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable Multi-Viewport / Platform Windows
+    // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+    // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;   // Enable Docking
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
+    io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports;
+    io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;
 
-    ImFont* fontTTF = io.Fonts->AddFontFromFileTTF("../asserts/font/FZLBJW.ttf", 30.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
-
+    ImFont *fontTTF = io.Fonts->AddFontFromFileTTF("../asserts/font/AdobeHeiti.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+    // ImGui::GetIO().FontGlobalScale = highDPIscaleFactor;
+    // setImGuiStyle(highDPIscaleFactor);
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
@@ -208,9 +285,8 @@ int main()
         createHostWindow();
         showMainMenuBar();
         // ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport());
+        // ImGui::SetWindowFontScale(highDPIscaleFactor);
         ImGui::ShowDemoWindow();
-
-
 
         // Rendering
         ImGui::Render();
