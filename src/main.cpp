@@ -187,6 +187,10 @@ void resize_window_callback(GLFWwindow *glfw_window, int x, int y)
 
 int main()
 {
+
+
+
+
     if (!glfwInit())
     {
         std::cout << "glfw init failed" << std::endl;
@@ -311,5 +315,13 @@ int main()
         glfwSwapBuffers(window);
     }
 
+    // Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
+    
     return 0;
 }

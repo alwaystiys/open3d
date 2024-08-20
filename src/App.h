@@ -1,12 +1,18 @@
 
-class App{
+#include "base/GameWindow.h"
+
+class App
+{
 
 public:
-    App(int width, int height, const char* title);
+    App(const std::string& app_name);
     ~App();
 
 private:
-    
+    void loop();
+    void doFrame(float dt);
+    void handleInput(float dt);
 
-
+private:
+    GameWindow wnd;
 };

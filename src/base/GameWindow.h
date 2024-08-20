@@ -8,12 +8,12 @@
 class GameWindow{
 
 public:
-    GameWindow(int width, int height, const char* title);
+    GameWindow(int width, int height, const std::string &title);
     ~GameWindow();
 
 private:
     GLFWwindow* window;
     int width;
     int height;
-    const char* title;
+    const std::string &title;
 };
