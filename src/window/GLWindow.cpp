@@ -27,7 +27,11 @@ void GLWindow::showWindowCenter()
     glfwShowWindow(window);
 }
 
-GLWindow::GLWindow(int width, int height, const std::string &title) : width(width), height(height), title(title) {
+GLWindow::GLWindow(int width, int height, const char *title){
+
+    width = width;
+    height = height;
+    title = title;
 
     if (!glfwInit())
     {
@@ -43,7 +47,7 @@ GLWindow::GLWindow(int width, int height, const std::string &title) : width(widt
     glfwGetMonitorContentScale(monitor, &xscale, &yscale);
     std::cout << "[INFO INIT]: " << xscale << "x" << yscale << std::endl;
     std::cout << "[INFO INIT]: " << width << "x" << height << std::endl;
-    window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+    window = glfwCreateWindow(width, height, title, nullptr, nullptr);
 
     if (!window)
     {
@@ -63,10 +67,12 @@ GLWindow::~GLWindow() {
     glfwTerminate();
 }
 
+bool GLWindow::shouldClosed() {
+    return glfwWindowShouldClose(window);
+}
+
 void GLWindow::render()
 {
-    while(!glfwWindowShouldClose(window)){
-        glfwPollEvents();
-        glfwSwapBuffers(window);
-    }
+    glfwPollEvents();
+    glfwSwapBuffers(window);
 }

@@ -1,5 +1,5 @@
-
 #pragma once
+
 class IWindow
 {
 public:
@@ -7,8 +7,10 @@ public:
     // ~IWindow();
     virtual void render() = 0;
     virtual void showWindowCenter() = 0;
+    virtual bool shouldClosed() = 0;
 
-    // int width;
-    // int height;
-    // const std::string &title;
+protected:
+    int width;
+    int height;
+    const char *title;
 };

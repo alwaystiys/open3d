@@ -7,19 +7,22 @@
 #include "IWindow.h"
 #include <memory>
 
-class GLWindow : public IWindow{
+class GLWindow : public IWindow
+{
 
 public:
-    GLWindow(int width, int height, const std::string &title);
+    GLWindow(int width, int height, const char *title);
     ~GLWindow();
     void render();
+    bool shouldClosed();
+
 private:
     void showWindowCenter();
 
 private:
-    GLFWwindow* window;
-    GLFWmonitor* monitor;
-    int width;
-    int height;
-    const std::string &title;
+    GLFWwindow *window;
+    GLFWmonitor *monitor;
+    // int width;
+    // int height;
+    // const std::string &title;
 };

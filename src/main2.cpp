@@ -2,7 +2,5 @@
 
 int main()
 {
-    App app;
-    app.loop();
-    return 0;
+    return App().loop();
 }

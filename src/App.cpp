@@ -4,17 +4,26 @@
 App::App()
 {
     // wnd = new GLWindow(600, 400, "Open3D");
-    wnd = WindowMgr::getWindow(600, 400, "Open3D");
+    pWindow = WindowMgr::getWindow(600, 400, "Open3D");
 }
 
 App::~App()
 {
-    delete wnd;
+    delete pWindow;
 }
 
-void App::loop()
+int App::loop()
 {
-    wnd->render();
+
+    while (true)
+    {
+        if (pWindow->shouldClosed())
+        {
+            return 1;
+        }
+        pWindow->render();
+    }
+    return 0;
 }
 
 void App::doFrame(float dt)

@@ -1,4 +1,6 @@
 #pragma once
+#pragma once
+
 #include "IWindow.h"
 
 #define USE_OPENGL_WND
@@ -12,10 +14,13 @@ class WindowMgr
 {
 
 public:
-    static CurrWindow *getWindow(int width, int height, const std::string &title);
+    static CurrWindow *getWindow(int width, int height, const char *title)
+    {
+        return new CurrWindow(width, height, title);
+    }
 
 private:
     int width;
     int height;
-    const std::string &title;
+    const char *title;
 };
