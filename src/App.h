@@ -1,18 +1,19 @@
 
-#include "base/GameWindow.h"
+#pragma once
+#include "window/GLWindow.h"
 
 class App
 {
 
 public:
-    App(const std::string& app_name);
+    App();
     ~App();
+    void loop();
 
 private:
-    void loop();
     void doFrame(float dt);
     void handleInput(float dt);
 
 private:
-    GameWindow wnd;
+    IWindow *wnd;
 };

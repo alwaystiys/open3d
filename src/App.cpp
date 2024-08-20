@@ -1,15 +1,20 @@
 #include "App.h"
+#include "window/WindowMgr.h"
 
-App::App(const std::string &title) : wnd(600, 400, title)
+App::App()
 {
+    // wnd = new GLWindow(600, 400, "Open3D");
+    wnd = WindowMgr::getWindow(600, 400, "Open3D");
 }
 
 App::~App()
 {
+    delete wnd;
 }
 
 void App::loop()
 {
+    wnd->render();
 }
 
 void App::doFrame(float dt)

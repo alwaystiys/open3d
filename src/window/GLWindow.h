@@ -4,15 +4,21 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include "IWindow.h"
+#include <memory>
 
-class GameWindow{
+class GLWindow : public IWindow{
 
 public:
-    GameWindow(int width, int height, const std::string &title);
-    ~GameWindow();
+    GLWindow(int width, int height, const std::string &title);
+    ~GLWindow();
+    void render();
+private:
+    void showWindowCenter();
 
 private:
     GLFWwindow* window;
+    GLFWmonitor* monitor;
     int width;
     int height;
     const std::string &title;
