@@ -3,20 +3,30 @@
 
 #include "IWindow.h"
 
-#define USE_OPENGL_WND
 
-#ifdef USE_OPENGL_WND
+// #define GRAPHICS_API_DX11
+// #define GRAPHICS_API_DX12
+// #define GRAPHICS_API_VULKAN
+#define GRAPHICS_API_OPENGL
+
+#ifdef GRAPHICS_API_OPENGL
 #include "GLWindow.h"
 using CurrWindow = GLWindow;
+#elif USE_DIRECT_WND 
+
 #endif
 
 class WindowMgr
 {
 
 public:
-    static CurrWindow *getWindow(int width, int height, const char *title)
+    // static CurrWindow *getWindow(int width, int height, const char *title)
+    // {
+    //     return new CurrWindow(width, height, title);
+    // }
+    static std::unique_ptr<CurrWindow> createWindow(int width, int height, const char *title)
     {
-        return new CurrWindow(width, height, title);
+        return std::make_unique<CurrWindow>(width, height, title);
     }
 
 private:
