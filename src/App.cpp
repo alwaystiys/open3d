@@ -1,12 +1,11 @@
 #include "App.h"
 #include "window/WindowMgr.h"
 
-
-
 App::App()
 {
     // wnd = new GLWindow(600, 400, "Open3D");
-    pWindow = WindowMgr::createWindow(600, 400, "Simple Renderer");
+    pWindow = WindowMgr::createWindow();
+    pWindow->init(600, 400, "Simple Renderer");
 }
 
 App::~App()

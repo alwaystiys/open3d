@@ -4,15 +4,17 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include "IWindow.h"
 #include <memory>
+#include "IWindow.h"
+#include "../render/GLContext.h"
 
 class GLWindow : public IWindow
 {
 
 public:
-    GLWindow(int width, int height, const char *title);
+    GLWindow();
     ~GLWindow();
+    void init(int width, int height, const char *title);
     void render();
     bool shouldClosed();
 
@@ -22,7 +24,5 @@ private:
 private:
     GLFWwindow *window;
     GLFWmonitor *monitor;
-    // int width;
-    // int height;
-    // const std::string &title;
+    GLContext *pCtx;
 };

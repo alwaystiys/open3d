@@ -3,7 +3,6 @@
 
 #include "IWindow.h"
 
-
 // #define GRAPHICS_API_DX11
 // #define GRAPHICS_API_DX12
 // #define GRAPHICS_API_VULKAN
@@ -12,7 +11,7 @@
 #ifdef GRAPHICS_API_OPENGL
 #include "GLWindow.h"
 using CurrWindow = GLWindow;
-#elif USE_DIRECT_WND 
+#elif USE_DIRECT_WND
 
 #endif
 
@@ -24,13 +23,8 @@ public:
     // {
     //     return new CurrWindow(width, height, title);
     // }
-    static std::unique_ptr<CurrWindow> createWindow(int width, int height, const char *title)
+    static std::unique_ptr<CurrWindow> createWindow()
     {
-        return std::make_unique<CurrWindow>(width, height, title);
+        return std::make_unique<CurrWindow>();
     }
-
-private:
-    int width;
-    int height;
-    const char *title;
 };
