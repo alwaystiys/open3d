@@ -8,12 +8,10 @@ public:
     GLContext();
     ~GLContext();
 
-    bool init(IWindow*);
+    bool init(IWindow *);
     void pre_render();
     void post_render();
     void destroy();
 
-
 private:
-    
 };

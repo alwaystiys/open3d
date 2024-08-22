@@ -7,6 +7,7 @@
 #include <memory>
 #include "IWindow.h"
 #include "../render/GLContext.h"
+#include "../render/UIContext.h"
 
 class GLWindow : public IWindow
 {
@@ -14,36 +15,18 @@ class GLWindow : public IWindow
 public:
     GLWindow();
     ~GLWindow();
-    void init(int width, int height, const char *title);
-    void render();
-    bool shouldClosed();
+    void init(int width, int height, const char *title) override;
+    void render() override;
+    bool shouldClosed() override;
 
-    void setNativeWindow(void *window) override
-    {
-        mWindow = (GLFWwindow *)window;
-    }
-
-    void *getNativeWindow() override
-    {
-        return mWindow;
-    }
-
-    void setNativeMonitor(void *monitor)
-    {
-        mMonitor = (GLFWmonitor *)monitor;
-    }
-
-    void *getNativeMonitor()
-    {
-        return mMonitor;
-    }
-
-private:
-    void showWindowCenter();
+    void setNativeWindow(void *window) override { mWindow = (GLFWwindow *)window; }
+    void *getNativeWindow() override { return mWindow; }
+    void setNativeMonitor(void *monitor) override { mMonitor = (GLFWmonitor *)monitor; }
+    void *getNativeMonitor() override { return mMonitor; }
 
 private:
     GLFWwindow *mWindow;
     GLFWmonitor *mMonitor;
-    // GLContext *pCtx;
     std::unique_ptr<GLContext> pCtx;
+    std::unique_ptr<UIContext> pUICtx;
 };
