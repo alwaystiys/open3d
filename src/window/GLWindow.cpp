@@ -5,6 +5,8 @@ GLWindow::GLWindow()
     mWindow = nullptr;
     pCtx = std::make_unique<GLContext>();
     pUICtx = std::make_unique<UIContext>();
+    pSceneView = std::make_unique<SceneView>();
+    pInspectorPanel = std::make_unique<InspectorPanel>();
 }
 
 GLWindow::~GLWindow()
@@ -31,6 +33,9 @@ void GLWindow::render()
 {
     pCtx->pre_render();
     pUICtx->pre_render();
+
+    pInspectorPanel->render();
+    pSceneView->render();
 
 
     pUICtx->post_render();

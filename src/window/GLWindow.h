@@ -8,6 +8,8 @@
 #include "IWindow.h"
 #include "../render/GLContext.h"
 #include "../render/UIContext.h"
+#include "../ui/SceneView.h"
+#include "../ui/InspectorPanel.h"
 
 class GLWindow : public IWindow
 {
@@ -29,4 +31,6 @@ private:
     GLFWmonitor *mMonitor;
     std::unique_ptr<GLContext> pCtx;
     std::unique_ptr<UIContext> pUICtx;
+    std::unique_ptr<SceneView> pSceneView;
+    std::unique_ptr<InspectorPanel> pInspectorPanel;
 };
