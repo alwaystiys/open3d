@@ -9,6 +9,14 @@ public:
     virtual void render() = 0;
     virtual void showWindowCenter() = 0;
     virtual bool shouldClosed() = 0;
+    virtual void setNativeWindow(void *window) = 0;
+    virtual void *getNativeWindow() = 0;
+
+    virtual void setNativeMonitor(void *monitor) {}
+    virtual void *getNativeMonitor()
+    {
+        return nullptr;
+    }
 
 public:
     int width;

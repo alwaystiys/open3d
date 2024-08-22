@@ -3,88 +3,99 @@
 
 GLWindow::GLWindow()
 {
-    pCtx = new GLContext();
+    mWindow = nullptr;
+    // pCtx = new GLContext();
+    pCtx = std::make_unique<GLContext>();
 }
 
 GLWindow::~GLWindow()
 {
-    delete pCtx; 
-    //   
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    // delete pCtx;
+    //
+    pCtx->destroy();
+    // glfwDestroyWindow(mWindow);
+    // glfwTerminate();
 }
 
 void GLWindow::init(int width, int height, const char *title)
 {
-    width = width;
-    height = height;
-    title = title;
+    this->width = width;
+    this->height = height;
+    this->title = title;
 
     pCtx->init(this);
-    
 
-    if (!glfwInit())
-    {
-        std::cout << "glfw init failed" << std::endl;
-        // return -1;
-    }
+    // if (!glfwInit())
+    // {
+    //     std::cout << "glfw init failed" << std::endl;
+    //     // return -1;
+    // }
 
-    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-    glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+    // glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+    // glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
 
-    monitor = glfwGetPrimaryMonitor();
-    float xscale, yscale;
-    glfwGetMonitorContentScale(monitor, &xscale, &yscale);
-    std::cout << "[INFO INIT]: " << xscale << "x" << yscale << std::endl;
-    std::cout << "[INFO INIT]: " << width << "x" << height << std::endl;
-    window = glfwCreateWindow(width, height, title, nullptr, nullptr);
+    // monitor = glfwGetPrimaryMonitor();
+    // float xscale, yscale;
+    // glfwGetMonitorContentScale(monitor, &xscale, &yscale);
+    // std::cout << "[INFO INIT]: " << xscale << "x" << yscale << std::endl;
+    // std::cout << "[INFO INIT]: " << width << "x" << height << std::endl;
+    // window = glfwCreateWindow(width, height, title, nullptr, nullptr);
 
-    if (!window)
-    {
-        std::cout << "window init failed" << std::endl;
-        // glfwTerminate();
-        // return -1;
-    }
+    // if (!window)
+    // {
+    //     std::cout << "window init failed" << std::endl;
+    //     // glfwTerminate();
+    //     // return -1;
+    // }
 
-    showWindowCenter();
-    glfwMakeContextCurrent(window);
-    gladLoadGL(glfwGetProcAddress);
-    glfwSwapInterval(1);
+    // showWindowCenter();
+    // glfwMakeContextCurrent(mWindow);
+    // gladLoadGL(glfwGetProcAddress);
+    // glfwSwapInterval(1);
 }
 
 void GLWindow::showWindowCenter()
 {
-    if (!monitor)
-        return;
 
-    const GLFWvidmode *mode = glfwGetVideoMode(monitor);
-    if (!mode)
-        return;
+    // if (!mMonitor)
+    //     return;
 
-    int monitorX, monitorY;
-    glfwGetMonitorPos(monitor, &monitorX, &monitorY);
+    // const GLFWvidmode *mode = glfwGetVideoMode(mMonitor);
+    // if (!mode)
+    //     return;
 
-    int windowWidth, windowHeight;
-    glfwGetWindowSize(window, &windowWidth, &windowHeight);
+    // int monitorX, monitorY;
+    // glfwGetMonitorPos(monitor, &monitorX, &monitorY);
 
-    std::cout << "monitorX: " << monitorX << " monitorY: " << monitorY << std::endl;
-    std::cout << "windowWidth: " << windowWidth << " windowHeight: " << windowHeight << std::endl;
+    // int windowWidth, windowHeight;
+    // glfwGetWindowSize(mWindow, &windowWidth, &windowHeight);
 
-    glfwSetWindowPos(
-        window,
-        monitorX + (mode->width - windowWidth) / 2,
-        monitorY + (mode->height - windowHeight) / 2);
+    // std::cout << "monitorX: " << monitorX << " monitorY: " << monitorY << std::endl;
+    // std::cout << "windowWidth: " << windowWidth << " windowHeight: " << windowHeight << std::endl;
 
-    glfwShowWindow(window);
+    // glfwSetWindowPos(
+    //     mWindow,
+    //     monitorX + (mode->width - windowWidth) / 2,
+    //     monitorY + (mode->height - windowHeight) / 2);
+
+    // glfwShowWindow(mWindow);
 }
 
 bool GLWindow::shouldClosed()
 {
-    return glfwWindowShouldClose(window);
+    return glfwWindowShouldClose(mWindow);
 }
 
 void GLWindow::render()
 {
-    glfwPollEvents();
-    glfwSwapBuffers(window);
+
+    pCtx->pre_render();
+
+    pCtx->post_render();
+
+    // glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // glfwPollEvents();
+    // glfwSwapBuffers(window);
 }

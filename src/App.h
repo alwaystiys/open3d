@@ -14,7 +14,5 @@ private:
     void handleInput(float dt);
 
 private:
-    // IWindow *pWindow;
-    // std::unique_ptr<IWindow> mWindow;
     std::unique_ptr<IWindow> pWindow;
 };

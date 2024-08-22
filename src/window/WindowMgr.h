@@ -19,9 +19,9 @@ class WindowMgr
 {
 
 public:
-    // static CurrWindow *getWindow(int width, int height, const char *title)
+    // static CurrWindow* createWindow()
     // {
-    //     return new CurrWindow(width, height, title);
+    //     return new CurrWindow();
     // }
     static std::unique_ptr<CurrWindow> createWindow()
     {

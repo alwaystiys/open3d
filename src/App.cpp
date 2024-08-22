@@ -3,14 +3,12 @@
 
 App::App()
 {
-    // wnd = new GLWindow(600, 400, "Open3D");
     pWindow = WindowMgr::createWindow();
     pWindow->init(600, 400, "Simple Renderer");
 }
 
 App::~App()
 {
-    // delete pWindow;
 }
 
 int App::loop()

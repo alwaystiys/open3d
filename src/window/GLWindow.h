@@ -18,11 +18,32 @@ public:
     void render();
     bool shouldClosed();
 
+    void setNativeWindow(void *window) override
+    {
+        mWindow = (GLFWwindow *)window;
+    }
+
+    void *getNativeWindow() override
+    {
+        return mWindow;
+    }
+
+    void setNativeMonitor(void *monitor)
+    {
+        mMonitor = (GLFWmonitor *)monitor;
+    }
+
+    void *getNativeMonitor()
+    {
+        return mMonitor;
+    }
+
 private:
     void showWindowCenter();
 
 private:
-    GLFWwindow *window;
-    GLFWmonitor *monitor;
-    GLContext *pCtx;
+    GLFWwindow *mWindow;
+    GLFWmonitor *mMonitor;
+    // GLContext *pCtx;
+    std::unique_ptr<GLContext> pCtx;
 };
