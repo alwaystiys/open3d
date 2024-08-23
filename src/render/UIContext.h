@@ -19,10 +19,10 @@ public:
     void post_render();
     void destroy();
 
-
 private:
-
     void showMainMenuBar();
     void createHostWindow();
 
+private:
+    bool isDemoShow;
 };

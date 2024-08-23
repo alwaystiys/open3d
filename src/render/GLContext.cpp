@@ -61,7 +61,6 @@ bool GLContext::init(IWindow *window)
         return false;
     }
 
-
     window->setNativeMonitor(monitor);
     float xscale, yscale;
     glfwGetMonitorContentScale(monitor, &xscale, &yscale);

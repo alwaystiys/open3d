@@ -3,6 +3,7 @@
 
 UIContext::UIContext()
 {
+    isDemoShow = false;
 }
 
 UIContext::~UIContext()
@@ -20,7 +21,7 @@ bool UIContext::init(IWindow *window)
     io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports;
     io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;
 
-    ImFont *fontTTF = io.Fonts->AddFontFromFileTTF("../asserts/font/AdobeHeiti.ttf", 14.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+    ImFont *fontTTF = io.Fonts->AddFontFromFileTTF("../asserts/font/AdobeHeiti.ttf", 12.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
     // ImGui::GetIO().FontGlobalScale = highDPIscaleFactor;
     // setImGuiStyle(highDPIscaleFactor);
     // Setup Dear ImGui style
@@ -52,6 +53,12 @@ void UIContext::showMainMenuBar()
         if (ImGui::BeginMenu("文件"))
         {
             // ShowExampleMenuFile();
+            if (ImGui::MenuItem("Save", "CTRL+Z"))
+            {
+            }
+            if (ImGui::MenuItem("Demo", "CTRL+Z", &isDemoShow))
+            {
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("编辑"))
@@ -145,7 +152,10 @@ void UIContext::pre_render()
     ImGui::NewFrame();
     createHostWindow();
     showMainMenuBar();
-    ImGui::ShowDemoWindow();
+    if (isDemoShow)
+    {
+        ImGui::ShowDemoWindow();
+    }
 }
 
 void UIContext::post_render()
