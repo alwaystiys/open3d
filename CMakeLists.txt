@@ -14,6 +14,7 @@ add_subdirectory(thirdparty/glfw-3.4)
 add_subdirectory(thirdparty/glad)
 add_subdirectory(thirdparty/imgui-docking)
 add_subdirectory(thirdparty/glm)
+add_subdirectory(thirdparty/spdlog)
 file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 add_executable(${CMAKE_PROJECT_NAME})
@@ -24,6 +25,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${MY_SOURCES})
 # add include directory
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 # link libraries
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE glfw glad imgui glm) # glad stb_image stb_truetype imgui)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE glfw glad imgui glm spdlog) # glad stb_image stb_truetype imgui)
 
-         
+
+#spdlog依赖的线程库
+# find_package(Threads REQUIRED)
