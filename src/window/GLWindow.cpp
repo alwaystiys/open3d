@@ -12,6 +12,7 @@ GLWindow::GLWindow()
 GLWindow::~GLWindow()
 {
     pCtx->destroy();
+    pUICtx->destroy();
 }
 
 void GLWindow::init(int width, int height, const char *title)
@@ -37,7 +38,11 @@ void GLWindow::render()
     pInspectorPanel->render();
     pSceneView->render();
 
-
     pUICtx->post_render();
     pCtx->post_render();
+}
+
+void GLWindow::handleMsg()
+{
+
 }

@@ -18,10 +18,6 @@ class WindowMgr
 {
 
 public:
-    // static CurrWindow* createWindow()
-    // {
-    //     return new CurrWindow();
-    // }
     static std::unique_ptr<CurrWindow> createWindow()
     {
         return std::make_unique<CurrWindow>();

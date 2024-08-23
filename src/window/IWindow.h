@@ -12,6 +12,7 @@ public:
     virtual void *getNativeWindow() = 0;
     virtual void setNativeMonitor(void *monitor) {}
     virtual void *getNativeMonitor() { return nullptr; }
+    virtual void handleMsg() = 0;
 
 public:
     int width;

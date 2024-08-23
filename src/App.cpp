@@ -13,22 +13,15 @@ App::~App()
 
 int App::loop()
 {
-
     while (true)
     {
         if (pWindow->shouldClosed())
         {
             return 1;
         }
+        pWindow->handleMsg();
         pWindow->render();
     }
     return 0;
 }
 
-void App::doFrame(float dt)
-{
-}
-
-void App::handleInput(float dt)
-{
-}

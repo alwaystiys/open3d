@@ -25,7 +25,7 @@ public:
     void *getNativeWindow() override { return mWindow; }
     void setNativeMonitor(void *monitor) override { mMonitor = (GLFWmonitor *)monitor; }
     void *getNativeMonitor() override { return mMonitor; }
-
+    void handleMsg() override;
 private:
     GLFWwindow *mWindow;
     GLFWmonitor *mMonitor;
