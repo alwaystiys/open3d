@@ -26,6 +26,11 @@ public:
     void setNativeMonitor(void *monitor) override { mMonitor = (GLFWmonitor *)monitor; }
     void *getNativeMonitor() override { return mMonitor; }
     void handleMsg() override;
+    void onKeyCallback(int key, int scancode, int action, int mods) override;
+    void onScrollCallback(double delta) override;
+    void onMouseButtonCallback(int button, int action, int mods) override;
+    void onWindowResizeCallback(int width, int height) override;
+
 private:
     GLFWwindow *mWindow;
     GLFWmonitor *mMonitor;

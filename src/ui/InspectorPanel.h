@@ -1,6 +1,7 @@
 #pragma once
+#include "Component.h"
 
-class InspectorPanel
+class InspectorPanel : public Component
 {
 
 public:

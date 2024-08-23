@@ -44,5 +44,24 @@ void GLWindow::render()
 
 void GLWindow::handleMsg()
 {
+}
 
+void GLWindow::onKeyCallback(int key, int scancode, int action, int mods)
+{
+    std::cout << "gl onKeyCallback " << key << " " << scancode << " " << action << " " << mods << std::endl;
+}
+
+void GLWindow::onScrollCallback(double delta)
+{
+    std::cout << "gl onScrollCallback " << delta << std::endl;
+}
+
+void GLWindow::onMouseButtonCallback(int button, int action, int mods)
+{
+    std::cout << "gl onMouseButtonCallback " << button << " " << action << " " << mods << std::endl;
+}
+
+void GLWindow::onWindowResizeCallback(int width, int height)
+{
+    std::cout << "gl onWindowResizeCallback " << width << " " << height << std::endl;
 }

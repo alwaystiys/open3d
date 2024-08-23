@@ -11,6 +11,30 @@ GLContext::~GLContext()
 {
 }
 
+static void onKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
+{
+    auto glWindow = static_cast<IWindow *>(glfwGetWindowUserPointer(window));
+    glWindow->onKeyCallback(key, scancode, action, mods);
+}
+
+static void onScrollCallback(GLFWwindow *window, double xoffset, double yoffset)
+{
+    auto glWindow = static_cast<IWindow *>(glfwGetWindowUserPointer(window));
+    glWindow->onScrollCallback(yoffset);
+}
+
+static void onMouseButtonCallback(GLFWwindow *window, int button, int action, int mods)
+{
+    auto glWindow = static_cast<IWindow *>(glfwGetWindowUserPointer(window));
+    glWindow->onMouseButtonCallback(button, action, mods);
+}
+
+static void onWindowResizeCallback(GLFWwindow *window, int width, int height)
+{
+    auto glWindow = static_cast<IWindow *>(glfwGetWindowUserPointer(window));
+    glWindow->onWindowResizeCallback(width, height);
+}
+
 bool GLContext::init(IWindow *window)
 {
     RenderContext::init(window);
@@ -27,12 +51,16 @@ bool GLContext::init(IWindow *window)
     GLFWwindow *nativeWindow = glfwCreateWindow(window->width, window->height, window->title, nullptr, nullptr);
     window->setNativeWindow(nativeWindow);
 
+    // associate the window with the context
+    glfwSetWindowUserPointer(nativeWindow, window);
+
     auto monitor = glfwGetPrimaryMonitor();
     if (!monitor)
     {
         std::cout << "monitor is null" << std::endl;
         return false;
     }
+
 
     window->setNativeMonitor(monitor);
     float xscale, yscale;
@@ -46,6 +74,12 @@ bool GLContext::init(IWindow *window)
         glfwTerminate();
         return false;
     }
+
+    // callback
+    glfwSetKeyCallback(nativeWindow, onKeyCallback);
+    glfwSetScrollCallback(nativeWindow, onScrollCallback);
+    glfwSetMouseButtonCallback(nativeWindow, onMouseButtonCallback);
+    glfwSetWindowSizeCallback(nativeWindow, onWindowResizeCallback);
 
     glfwMakeContextCurrent(nativeWindow);
     gladLoadGL(glfwGetProcAddress);

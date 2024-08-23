@@ -1,6 +1,7 @@
 #pragma once
+#include "Component.h"
 
-class SceneView
+class SceneView : public Component
 {
 
 public:

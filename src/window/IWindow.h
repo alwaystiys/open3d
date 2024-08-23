@@ -14,6 +14,12 @@ public:
     virtual void *getNativeMonitor() { return nullptr; }
     virtual void handleMsg() = 0;
 
+    // input
+    virtual void onKeyCallback(int key, int scancode, int action, int mods) = 0;
+    virtual void onScrollCallback(double delta) = 0;
+    virtual void onMouseButtonCallback(int button, int action, int mods) = 0;
+    virtual void onWindowResizeCallback(int width, int height) = 0;
+
 public:
     int width;
     int height;
