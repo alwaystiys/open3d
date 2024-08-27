@@ -11,7 +11,7 @@ SceneView::~SceneView()
 
 void SceneView::render()
 {
-    ImGui::Begin("Scene");
+    // ImGui::Begin("Scene");
 
 
 
@@ -19,6 +19,6 @@ void SceneView::render()
     
     
 
-    ImGui::End();
+    // ImGui::End();
 
 }

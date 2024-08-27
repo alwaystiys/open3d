@@ -35,7 +35,8 @@ public:
     void drawInitTest();
     void drawTest();
     void drawDestroyTest();
-
+    void drawCreateFramebuffer();
+    void drawRescaleFramebuffer(float width, float height);
 private:
     GLFWwindow *mWindow;
     GLFWmonitor *mMonitor;
@@ -47,5 +48,5 @@ private:
 
 private:
     std::unique_ptr<Shader> pShader;
-    GLuint VBO, VAO;
+    GLuint VBO, VAO, FBO, RBO, texture_id;
 };
