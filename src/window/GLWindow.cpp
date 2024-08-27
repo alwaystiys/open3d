@@ -5,7 +5,7 @@ GLWindow::GLWindow()
 {
     mWindow = nullptr;
     pCtx = std::make_unique<GLContext>();
-    // pUICtx = std::make_unique<UIContext>();
+    pUICtx = std::make_unique<UIContext>();
     pSceneView = std::make_unique<SceneView>();
     pInspectorPanel = std::make_unique<InspectorPanel>();
 }
@@ -14,7 +14,7 @@ GLWindow::~GLWindow()
 {
     drawDestroyTest();
     pCtx->destroy();
-    // pUICtx->destroy();
+    pUICtx->destroy();
 
 }
 
@@ -25,7 +25,7 @@ void GLWindow::init(int width, int height, const char *title)
     this->title = title;
 
     pCtx->init(this);
-    // pUICtx->init(this);
+    pUICtx->init(this);
 
 
     drawInitTest();
@@ -40,14 +40,14 @@ bool GLWindow::shouldClosed()
 void GLWindow::render()
 {
     pCtx->pre_render();
-    // pUICtx->pre_render();
+    pUICtx->pre_render();
 
-    // pInspectorPanel->render();
-    // pSceneView->render();
+    pInspectorPanel->render();
+    pSceneView->render();
 
     drawTest();
 
-    // pUICtx->post_render();
+    pUICtx->post_render();
     pCtx->post_render();
 }
 

@@ -48,7 +48,7 @@
 
 // void createHostWindow()
 // {
-//     static bool opt_fullscreen = true;
+//     static bool opt_fullscreen = false;
 //     static bool opt_padding = true;
 //     static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
@@ -244,7 +244,7 @@
 //     io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports;
 //     io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;
 
-//     ImFont *fontTTF = io.Fonts->AddFontFromFileTTF("../asserts/font/AdobeHeiti.ttf", 15.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+//     ImFont *fontTTF = io.Fonts->AddFontFromFileTTF("../assets/font/AdobeHeiti.ttf", 15.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 //     // ImGui::GetIO().FontGlobalScale = highDPIscaleFactor;
 //     // setImGuiStyle(highDPIscaleFactor);
 //     // Setup Dear ImGui style

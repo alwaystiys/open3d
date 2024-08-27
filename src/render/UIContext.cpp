@@ -4,6 +4,7 @@
 UIContext::UIContext()
 {
     isDemoShow = false;
+    isFullScreen = true;
 }
 
 UIContext::~UIContext()
@@ -59,6 +60,9 @@ void UIContext::showMainMenuBar()
             if (ImGui::MenuItem("Demo", "CTRL+Z", &isDemoShow))
             {
             }
+            if (ImGui::MenuItem("FULLSCREEN", "CTRL+Z", &isFullScreen))
+            {
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("编辑"))
@@ -86,14 +90,14 @@ void UIContext::showMainMenuBar()
 }
 void UIContext::createHostWindow()
 {
-    static bool opt_fullscreen = true;
+    static bool opt_fullscreen = false;
     static bool opt_padding = true;
     static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
     // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
     // because it would be confusing to have two docking targets within each others.
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
-    if (opt_fullscreen)
+    if (isFullScreen)
     {
         const ImGuiViewport *viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
@@ -125,7 +129,7 @@ void UIContext::createHostWindow()
     if (!opt_padding)
         ImGui::PopStyleVar();
 
-    if (opt_fullscreen)
+    if (isFullScreen)
         ImGui::PopStyleVar(2);
 
     // Submit the DockSpace

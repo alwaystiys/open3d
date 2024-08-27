@@ -25,4 +25,5 @@ private:
 
 private:
     bool isDemoShow;
+    bool isFullScreen;
 };
