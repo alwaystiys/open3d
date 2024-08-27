@@ -33,6 +33,20 @@ static void onWindowResizeCallback(GLFWwindow *window, int width, int height)
 {
     auto glWindow = static_cast<IWindow *>(glfwGetWindowUserPointer(window));
     glWindow->onWindowResizeCallback(width, height);
+    glViewport(0, 0, width, height);
+}
+
+static void onFramebufferResizeCallback(GLFWwindow* window, int width, int height)
+{
+    auto glWindow = static_cast<IWindow *>(glfwGetWindowUserPointer(window));
+    std::cout << "gl onFramebufferResizeCallback " << width << " " << height << std::endl;
+
+}
+
+
+static void onWindowContentScaleCallback(GLFWwindow *window, float xscale, float yscale){
+    auto glWindow = static_cast<IWindow *>(glfwGetWindowUserPointer(window));
+    // glWindow->onWindowContentScaleCallback(xscale, yscale);
 }
 
 bool GLContext::init(IWindow *window)
@@ -47,6 +61,7 @@ bool GLContext::init(IWindow *window)
     }
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+    glfwWindowHint(GLFW_SCALE_FRAMEBUFFER, GLFW_TRUE);
 
     GLFWwindow *nativeWindow = glfwCreateWindow(window->width, window->height, window->title, nullptr, nullptr);
     window->setNativeWindow(nativeWindow);
@@ -67,6 +82,11 @@ bool GLContext::init(IWindow *window)
     std::cout << "[INFO INIT]: " << xscale << "x" << yscale << std::endl;
     std::cout << "[INFO INIT]: " << window->width << "x" << window->height << std::endl;
 
+    float cxscale, cyscale;
+    glfwGetWindowContentScale(nativeWindow, &cxscale, &cyscale);
+    std::cout << "[INFO CONTENT SCALE]: " << cxscale << "x" << cyscale << std::endl;
+
+
     if (!nativeWindow)
     {
         std::cout << "GLFWwindow init failed" << std::endl;
@@ -79,6 +99,8 @@ bool GLContext::init(IWindow *window)
     glfwSetScrollCallback(nativeWindow, onScrollCallback);
     glfwSetMouseButtonCallback(nativeWindow, onMouseButtonCallback);
     glfwSetWindowSizeCallback(nativeWindow, onWindowResizeCallback);
+    glfwSetFramebufferSizeCallback(nativeWindow, onFramebufferResizeCallback);
+    glfwSetWindowContentScaleCallback(nativeWindow, onWindowContentScaleCallback);
 
     glfwMakeContextCurrent(nativeWindow);
     gladLoadGL(glfwGetProcAddress);
@@ -100,6 +122,11 @@ bool GLContext::init(IWindow *window)
     std::cout << "[INFO MONITOR]: " << monitorX << " " << monitorY << std::endl;
     std::cout << "[INFO SCALE_SIZE]: " << windowWidth << "x" << windowHeight << std::endl;
 
+    int fbWidth, fbHeight;
+    glfwGetFramebufferSize(nativeWindow, &fbWidth, &fbHeight);
+
+    std::cout << "[INFO FB_SIZE]: " << fbWidth << "x" << fbHeight << std::endl;
+
     glfwSetWindowPos(
         nativeWindow,
         monitorX + (mode->width - windowWidth) / 2,
@@ -111,7 +138,7 @@ bool GLContext::init(IWindow *window)
 
 void GLContext::pre_render()
 {
-    glViewport(0, 0, mWindow->width, mWindow->height);
+
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
