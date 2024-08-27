@@ -10,6 +10,7 @@
 #include "../render/UIContext.h"
 #include "../ui/SceneView.h"
 #include "../ui/InspectorPanel.h"
+#include "../shader/Shader.h"
 
 class GLWindow : public IWindow
 {
@@ -31,6 +32,10 @@ public:
     void onMouseButtonCallback(int button, int action, int mods) override;
     void onWindowResizeCallback(int width, int height) override;
 
+    void drawInitTest();
+    void drawTest();
+    void drawDestroyTest();
+
 private:
     GLFWwindow *mWindow;
     GLFWmonitor *mMonitor;
@@ -38,4 +43,9 @@ private:
     std::unique_ptr<UIContext> pUICtx;
     std::unique_ptr<SceneView> pSceneView;
     std::unique_ptr<InspectorPanel> pInspectorPanel;
+
+
+private:
+    std::unique_ptr<Shader> pShader;
+    GLuint VBO, VAO;
 };

@@ -26,7 +26,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${MY_SOURCES})
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 # link libraries
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE glfw glad imgui glm spdlog) # glad stb_image stb_truetype imgui)
-
+ 
 
 #spdlog依赖的线程库
-# find_package(Threads REQUIRED)
+# find_package(Threads REQUIRED) 

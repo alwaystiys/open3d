@@ -12,7 +12,8 @@ Shader::Shader(std::string& vsFileName, std::string& fsFileName)
     std::string vertexCode = readFromFile(vsFileName);
     std::string fragmentCode = readFromFile(fsFileName);
 
-    compile(vertexCode.c_str(), fragmentCode.c_str());  
+    compile(vertexCode.c_str(), fragmentCode.c_str()); 
+
 }
 
 // Shader::Shader(std::string& vsFileName, std::string& fsFileName, std::string& gsFileName)
@@ -27,7 +28,7 @@ std::string Shader::readFromFile(std::string& fileName){
     file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     try
     {
-        file.open("res/shaders/" + fileName);
+        file.open("../assets/shaders/" + fileName);
         std::stringstream stream;
         stream << file.rdbuf();
         file.close();
@@ -80,7 +81,9 @@ void Shader::compile(const GLchar *vertexSource, const GLchar *fragmentSource, c
     {
         glDeleteShader(gShader);
     }
-}
+ 
+    spdlog::info("Shader compiled successfully");
+} 
 
 void Shader::checkCompileErrors(GLuint object, std::string type)
 {

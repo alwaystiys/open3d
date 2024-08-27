@@ -21,7 +21,7 @@ bool UIContext::init(IWindow *window)
     io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports;
     io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;
 
-    ImFont *fontTTF = io.Fonts->AddFontFromFileTTF("../asserts/font/AdobeHeiti.ttf", 12.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+    ImFont *fontTTF = io.Fonts->AddFontFromFileTTF("../assets/font/AdobeHeiti.ttf", 12.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
     // ImGui::GetIO().FontGlobalScale = highDPIscaleFactor;
     // setImGuiStyle(highDPIscaleFactor);
     // Setup Dear ImGui style
