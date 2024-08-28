@@ -86,7 +86,6 @@ bool GLContext::init(IWindow *window)
     glfwGetWindowContentScale(nativeWindow, &cxscale, &cyscale);
     std::cout << "[INFO CONTENT SCALE]: " << cxscale << "x" << cyscale << std::endl;
 
-
     if (!nativeWindow)
     {
         std::cout << "GLFWwindow init failed" << std::endl;
@@ -118,6 +117,8 @@ bool GLContext::init(IWindow *window)
 
     int windowWidth, windowHeight;
     glfwGetWindowSize(nativeWindow, &windowWidth, &windowHeight);
+    window->width = windowWidth;
+    window->height = windowHeight;
 
     std::cout << "[INFO MONITOR]: " << monitorX << " " << monitorY << std::endl;
     std::cout << "[INFO SCALE_SIZE]: " << windowWidth << "x" << windowHeight << std::endl;
@@ -138,7 +139,7 @@ bool GLContext::init(IWindow *window)
 
 void GLContext::pre_render()
 {
-
+    glViewport(0, 0, mWindow->width, mWindow->height);    
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

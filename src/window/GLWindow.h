@@ -34,8 +34,9 @@ public:
 
     void drawInitTest();
     void drawTest();
+    void drawToImGUITest();
     void drawDestroyTest();
-    void drawCreateFramebuffer();
+    void drawCreateFramebuffer(int window_width, int window_height);
     void drawRescaleFramebuffer(float width, float height);
 private:
     GLFWwindow *mWindow;

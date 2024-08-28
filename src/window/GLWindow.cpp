@@ -27,7 +27,7 @@ void GLWindow::init(int width, int height, const char *title)
     pUICtx->init(this);
 
     drawInitTest();
-    drawCreateFramebuffer();
+    drawCreateFramebuffer(this->width, this->height);
 }
 
 bool GLWindow::shouldClosed()
@@ -43,6 +43,7 @@ void GLWindow::render()
     pInspectorPanel->render();
     pSceneView->render();
 
+    drawToImGUITest();
     drawTest();
 
     pUICtx->post_render();
@@ -51,6 +52,11 @@ void GLWindow::render()
 
 void GLWindow::drawInitTest()
 {
+    VBO = 0;
+    VAO = 0;
+    FBO = 0;
+    RBO = 0;
+    texture_id = 0;
 
     std::string vsName = "test.vs";
     std::string fsName = "test.fs";
@@ -96,44 +102,48 @@ void GLWindow::drawInitTest()
 
 void GLWindow::drawRescaleFramebuffer(float width, float height)
 {
-	glBindTexture(GL_TEXTURE_2D, texture_id);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
 
-	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
+    glBindRenderbuffer(GL_RENDERBUFFER, RBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
+}
+
+void GLWindow::drawToImGUITest()
+{
+    pShader->use();
+    ImGui::Begin("Scene");
+
+    float window_width = ImGui::GetContentRegionAvail().x;
+    float window_height = ImGui::GetContentRegionAvail().y;
+
+    // spdlog::info("IMGUI Scene Window size: {}x{}", window_width, window_height);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    glViewport(0, 0, this->width, this->height);
+    // glViewport(0, 0, window_width, window_height);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    // drawRescaleFramebuffer(window_width, window_height);
+    // glViewport(0, 0, window_width, window_height);
+    ImGui::Image(reinterpret_cast<void *>(texture_id), ImVec2{window_width, window_height}, ImVec2{0, 1}, ImVec2{1, 0});
+    ImGui::End();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void GLWindow::drawTest()
 {
-    ImGui::Begin("Scene");
-
-    const float window_width = ImGui::GetContentRegionAvail().x;
-    const float window_height = ImGui::GetContentRegionAvail().y;
-
-    // drawRescaleFramebuffer(window_width, window_height);
-    glViewport(0, 0, window_width, window_height);
-
-    ImVec2 pos = ImGui::GetCursorScreenPos();
-    
-    ImGui::GetWindowDrawList()->AddImage(
-        (void *)texture_id, 
-        ImVec2(pos.x, pos.y), 
-        ImVec2(pos.x + window_width, pos.y + window_height), 
-        ImVec2(0, 1), 
-        ImVec2(1, 0)
-    );
-
-    ImGui::End();
-
-    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    glViewport(0, 0, this->width, this->height);
     pShader->use();
     glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
     glDrawArrays(GL_TRIANGLES, 0, 3);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void GLWindow::drawDestroyTest()
@@ -142,33 +152,34 @@ void GLWindow::drawDestroyTest()
     glDeleteBuffers(1, &VBO);
 
     glDeleteFramebuffers(1, &FBO);
-	glDeleteTextures(1, &texture_id);
-	glDeleteRenderbuffers(1, &RBO);
+    glDeleteTextures(1, &texture_id);
+    glDeleteRenderbuffers(1, &RBO);
 }
 
-void GLWindow::drawCreateFramebuffer()
+void GLWindow::drawCreateFramebuffer(int window_width, int window_height)
 {
+
+    if (FBO)
+    {
+        glDeleteFramebuffers(1, &FBO);
+        glDeleteTextures(1, &texture_id);
+        texture_id = 0;
+    }
+
     glGenFramebuffers(1, &FBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    glGenTextures(1, &texture_id);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
 
-	glGenTextures(1, &texture_id);
-	glBindTexture(GL_TEXTURE_2D, texture_id);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, window_width, window_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
 
-	glGenRenderbuffers(1, &RBO);
-	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glBindFramebuffer(GL_RENDERBUFFER, 0);
 }
 
 void GLWindow::handleMsg()
@@ -195,4 +206,6 @@ void GLWindow::onWindowResizeCallback(int width, int height)
     this->width = width;
     this->height = height;
     spdlog::info("gl onWindowResizeCallback {} {}", width, height);
+
+    drawCreateFramebuffer(this->width, this->height);
 }
