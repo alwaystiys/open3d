@@ -40,7 +40,7 @@ static void onWindowResizeCallback(GLFWwindow *window, int width, int height)
 static void onFramebufferResizeCallback(GLFWwindow *window, int width, int height)
 {
     auto glWindow = static_cast<IWindow *>(glfwGetWindowUserPointer(window));
-    // std::cout << "gl onFramebufferResizeCallback " << width << " " << height << std::endl;
+     //std::cout << "gl onFramebufferResizeCallback " << width << " " << height << std::endl;
 }
 
 static void onWindowContentScaleCallback(GLFWwindow *window, float xscale, float yscale)

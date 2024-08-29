@@ -3,7 +3,7 @@
 
 App::App()
 {
-    pWindow = WindowMgr::createWindow();
+    pWindow = WindowMgr::createWindow(); 
     pWindow->init(900, 500, "Simple Renderer");
 }
 
