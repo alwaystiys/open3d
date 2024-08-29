@@ -1,5 +1,6 @@
 #include "SceneView.h"
 #include <imgui.h>
+#include "spdlog/spdlog.h"
 
 SceneView::SceneView()
 {
@@ -39,6 +40,7 @@ void SceneView::init(int width, int height)
     glBindVertexArray(0);
 
     resize(width, height);
+
 }
 
 
@@ -77,6 +79,7 @@ void SceneView::render()
     // ImGui::Begin("Scene");
     // ImGui::End();
     mShader->use();
+    // ImGui::SetNextWindowSize(ImVec2(800, 600));
     ImGui::Begin("Scene");
 
     float window_width = ImGui::GetContentRegionAvail().x;

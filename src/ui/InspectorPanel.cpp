@@ -19,6 +19,7 @@ void InspectorPanel::update()
 
 void InspectorPanel::render()
 {
+    // ImGui::SetNextWindowSize(ImVec2(200, 600));
     ImGui::Begin("Inspector");
 
     ImGui::End();
