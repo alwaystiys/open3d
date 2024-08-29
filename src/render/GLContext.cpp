@@ -2,6 +2,7 @@
 #include "../pch.h"
 #include "../window/GLWindow.h"
 #include <assert.h>
+#include "spdlog/spdlog.h"
 
 GLContext::GLContext()
 {
@@ -36,15 +37,14 @@ static void onWindowResizeCallback(GLFWwindow *window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-static void onFramebufferResizeCallback(GLFWwindow* window, int width, int height)
+static void onFramebufferResizeCallback(GLFWwindow *window, int width, int height)
 {
     auto glWindow = static_cast<IWindow *>(glfwGetWindowUserPointer(window));
-    std::cout << "gl onFramebufferResizeCallback " << width << " " << height << std::endl;
-
+    // std::cout << "gl onFramebufferResizeCallback " << width << " " << height << std::endl;
 }
 
-
-static void onWindowContentScaleCallback(GLFWwindow *window, float xscale, float yscale){
+static void onWindowContentScaleCallback(GLFWwindow *window, float xscale, float yscale)
+{
     auto glWindow = static_cast<IWindow *>(glfwGetWindowUserPointer(window));
     // glWindow->onWindowContentScaleCallback(xscale, yscale);
 }
@@ -56,7 +56,7 @@ bool GLContext::init(IWindow *window)
     if (!glfwInit())
     {
         // fprintf(stderr, "Error: GLFW Window couldn't be initialized\n");
-        std::cout << "glfw init failed" << std::endl;
+        spdlog::error("Error: GLFW Window couldn't be initialized");
         return false;
     }
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
@@ -72,23 +72,23 @@ bool GLContext::init(IWindow *window)
     auto monitor = glfwGetPrimaryMonitor();
     if (!monitor)
     {
-        std::cout << "monitor is null" << std::endl;
+        spdlog::error("monitor is null");
         return false;
     }
 
     window->setNativeMonitor(monitor);
     float xscale, yscale;
     glfwGetMonitorContentScale(monitor, &xscale, &yscale);
-    std::cout << "[INFO INIT]: " << xscale << "x" << yscale << std::endl;
-    std::cout << "[INFO INIT]: " << window->width << "x" << window->height << std::endl;
+    spdlog::info("monitor content scale: {}x{}", xscale, yscale);
+    spdlog::info("window size: {}x{}", window->width, window->height);
 
     float cxscale, cyscale;
     glfwGetWindowContentScale(nativeWindow, &cxscale, &cyscale);
-    std::cout << "[INFO CONTENT SCALE]: " << cxscale << "x" << cyscale << std::endl;
+    spdlog::info("window content scale: {}x{}", cxscale, cyscale);
 
     if (!nativeWindow)
     {
-        std::cout << "GLFWwindow init failed" << std::endl;
+        spdlog::error("GLFWwindow init failed");
         glfwTerminate();
         return false;
     }
@@ -108,7 +108,7 @@ bool GLContext::init(IWindow *window)
     const GLFWvidmode *mode = glfwGetVideoMode(monitor);
     if (!mode)
     {
-        std::cout << "mode is null" << std::endl;
+        spdlog::error("monitor mode is null");
         return false;
     }
 
@@ -120,13 +120,13 @@ bool GLContext::init(IWindow *window)
     window->width = windowWidth;
     window->height = windowHeight;
 
-    std::cout << "[INFO MONITOR]: " << monitorX << " " << monitorY << std::endl;
-    std::cout << "[INFO SCALE_SIZE]: " << windowWidth << "x" << windowHeight << std::endl;
+    spdlog::info("monitor pos: {}x{}", monitorX, monitorY);
+    spdlog::info("window scale size: {}x{}", windowWidth, windowHeight);
 
     int fbWidth, fbHeight;
     glfwGetFramebufferSize(nativeWindow, &fbWidth, &fbHeight);
 
-    std::cout << "[INFO FB_SIZE]: " << fbWidth << "x" << fbHeight << std::endl;
+    spdlog::info("framebuffer size: {}x{}", fbWidth, fbHeight);
 
     glfwSetWindowPos(
         nativeWindow,
@@ -139,7 +139,7 @@ bool GLContext::init(IWindow *window)
 
 void GLContext::pre_render()
 {
-    glViewport(0, 0, mWindow->width, mWindow->height);    
+    glViewport(0, 0, mWindow->width, mWindow->height);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

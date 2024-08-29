@@ -10,6 +10,7 @@
 #include "../render/UIContext.h"
 #include "../ui/SceneView.h"
 #include "../ui/InspectorPanel.h"
+#include "../ui/HostView.h"
 #include "../shader/Shader.h"
 
 class GLWindow : public IWindow
@@ -45,7 +46,7 @@ private:
     std::unique_ptr<UIContext> pUICtx;
     std::unique_ptr<SceneView> pSceneView;
     std::unique_ptr<InspectorPanel> pInspectorPanel;
-
+    std::unique_ptr<HostView> pHostView;
 
 private:
     std::unique_ptr<Shader> pShader;

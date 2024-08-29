@@ -1,0 +1,15 @@
+
+// {
+//     "tasks": [
+//         {
+//             "label": "F7",
+//             "type": "shell",
+//             "command": "../build/open3.exe",
+//             "group": {
+//                 "kind": "build",
+//                 "isDefault": true
+//             },
+//             "problemMatcher": []
+//         }
+//     ]
+// }

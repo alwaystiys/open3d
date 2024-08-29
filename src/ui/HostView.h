@@ -3,21 +3,19 @@
 #include "../shader/Shader.h"
 #include <memory>
 
-class SceneView : public Component
+class HostView : public Component
 {
 
 public:
-    SceneView();
-    ~SceneView();
+    HostView();
+    ~HostView();
 
     void init(int width, int height);
     void update();
     void render();
     void destroy();
 
-    void resize(int width, int height);
-
 private:
     std::unique_ptr<Shader> mShader;
-    GLuint mVAO, mVBO, mFBO, mTextureId;
+    GLuint mVAO, mVBO, mTextureId;
 };

@@ -16,7 +16,7 @@ class Shader
 {
 public:
     Shader();
-    Shader(std::string &vsFileName, std::string &fsFileName);
+    Shader(std::string vsFileName, std::string fsFileName);
     // Shader(std::string& vsFileName, std::string& fsFileName, std::string& gsFileName);
     Shader(Shader &) = delete;
     Shader &operator=(Shader &) = delete;

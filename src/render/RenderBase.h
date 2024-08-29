@@ -1,6 +1,17 @@
 #pragma once
 #include "../window/IWindow.h"
 
+class VertexBuffer
+{
+    
+
+};
+
+class VertexIndexBuffer
+{
+
+};
+
 class RenderContext
 {
 public:

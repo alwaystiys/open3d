@@ -8,11 +8,14 @@ GLWindow::GLWindow()
     pUICtx = std::make_unique<UIContext>();
     pSceneView = std::make_unique<SceneView>();
     pInspectorPanel = std::make_unique<InspectorPanel>();
+    pHostView = std::make_unique<HostView>();
 }
 
 GLWindow::~GLWindow()
 {
-    drawDestroyTest();
+    pHostView->destroy();
+    pSceneView->destroy();
+    // drawDestroyTest();
     pCtx->destroy();
     pUICtx->destroy();
 }
@@ -25,9 +28,11 @@ void GLWindow::init(int width, int height, const char *title)
 
     pCtx->init(this);
     pUICtx->init(this);
+    pHostView->init(this->width, this->height);
+    pSceneView->init(this->width, this->height);
 
-    drawInitTest();
-    drawCreateFramebuffer(this->width, this->height);
+    // drawInitTest();
+    // drawCreateFramebuffer(this->width, this->height);
 }
 
 bool GLWindow::shouldClosed()
@@ -43,8 +48,10 @@ void GLWindow::render()
     pInspectorPanel->render();
     pSceneView->render();
 
-    drawToImGUITest();
-    drawTest();
+    pHostView->render();
+
+    // drawToImGUITest();
+    // drawTest();
 
     pUICtx->post_render();
     pCtx->post_render();
@@ -58,9 +65,9 @@ void GLWindow::drawInitTest()
     RBO = 0;
     texture_id = 0;
 
-    std::string vsName = "test.vs";
-    std::string fsName = "test.fs";
-    pShader = std::make_unique<Shader>(vsName, fsName);
+    // std::string vsName = "test.vs";
+    // std::string fsName = "test.fs";
+    pShader = std::make_unique<Shader>("test.vs", "test.fs");
 
     float vertices[] = {
         -0.5f, -0.5f, 0.0f, // left
@@ -87,32 +94,6 @@ void GLWindow::drawInitTest()
     glBindVertexArray(0);
 }
 
-// void GLWindow::rescale_framebuffer(float width, float height)
-// {
-// 	glBindTexture(GL_TEXTURE_2D, texture_id);
-// 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-// 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-// 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-// 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
-
-// 	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
-// 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-// 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
-// }
-
-void GLWindow::drawRescaleFramebuffer(float width, float height)
-{
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
-
-    glBindRenderbuffer(GL_RENDERBUFFER, RBO);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
-}
-
 void GLWindow::drawToImGUITest()
 {
     pShader->use();
@@ -130,7 +111,6 @@ void GLWindow::drawToImGUITest()
 
     glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
     glDrawArrays(GL_TRIANGLES, 0, 3);
-    // drawRescaleFramebuffer(window_width, window_height);
     // glViewport(0, 0, window_width, window_height);
     ImGui::Image(reinterpret_cast<void *>(texture_id), ImVec2{window_width, window_height}, ImVec2{0, 1}, ImVec2{1, 0});
     ImGui::End();
@@ -184,28 +164,30 @@ void GLWindow::drawCreateFramebuffer(int window_width, int window_height)
 
 void GLWindow::handleMsg()
 {
+    pHostView->update();
+
 }
 
 void GLWindow::onKeyCallback(int key, int scancode, int action, int mods)
 {
-    spdlog::info("gl onKeyCallback {} {} {} {}", key, scancode, action, mods);
+    spdlog::info("onKeyCallback {} {} {} {}", key, scancode, action, mods);
 }
 
 void GLWindow::onScrollCallback(double delta)
 {
-    spdlog::info("gl onScrollCallback {}", delta);
+    spdlog::info("onScrollCallback {}", delta);
 }
 
 void GLWindow::onMouseButtonCallback(int button, int action, int mods)
 {
-    spdlog::info("gl onMouseButtonCallback {} {} {}", button, action, mods);
+    spdlog::info("onMouseButtonCallback {} {} {}", button, action, mods);
 }
 
 void GLWindow::onWindowResizeCallback(int width, int height)
 {
+    spdlog::info("onWindowResizeCallback {} {}", width, height);
     this->width = width;
     this->height = height;
-    spdlog::info("gl onWindowResizeCallback {} {}", width, height);
-
-    drawCreateFramebuffer(this->width, this->height);
+    pSceneView->resize(width, height);
+    // drawCreateFramebuffer(this->width, this->height);
 }

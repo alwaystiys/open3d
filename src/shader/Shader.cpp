@@ -7,7 +7,7 @@ Shader::Shader()
 {
 }
 
-Shader::Shader(std::string& vsFileName, std::string& fsFileName)
+Shader::Shader(std::string vsFileName, std::string fsFileName)
 {
     std::string vertexCode = readFromFile(vsFileName);
     std::string fragmentCode = readFromFile(fsFileName);
