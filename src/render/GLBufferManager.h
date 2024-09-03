@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../pch.h"
+#include "VertexHolder.h"
+
 
 /**
  * 顶点缓冲区管理器
@@ -10,10 +12,11 @@ class GLVertexBufferHoder
 {
 
 public:
-	void createBuffer();
+	void createBuffer(std::vector<VertexHolder>, std::vector<GLuint> indices);
 	void deleteBuffer();
 	void bind();
 	void unbind();
+	void draw();
 
 
 protected:
