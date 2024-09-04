@@ -9,10 +9,12 @@ GLWindow::GLWindow()
     pSceneView = std::make_unique<SceneView>();
     pInspectorPanel = std::make_unique<InspectorPanel>();
     pHostView = std::make_unique<HostView>();
+    pBufferMgr = std::make_unique<GLVertexBufferHoder>();
 }
 
 GLWindow::~GLWindow()
 {
+    pBufferMgr->deleteBuffer();
     pHostView->destroy();
     pSceneView->destroy();
     // drawDestroyTest();
@@ -69,29 +71,47 @@ void GLWindow::drawInitTest()
     // std::string fsName = "test.fs";
     pShader = std::make_unique<Shader>("test.vs", "test.fs");
 
-    float vertices[] = {
-        -0.5f, -0.5f, 0.0f, // left
-        0.5f, -0.5f, 0.0f,  // right
-        0.0f, 0.5f, 0.0f    // top
-    };
+    //float vertices[] = {
+    //    -0.5f, -0.5f, 0.0f, // left
+    //    0.5f, -0.5f, 0.0f,  // right
+    //    0.0f, 0.5f, 0.0f    // top
+    //};
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-    glBindVertexArray(VAO);
+    VertexHolder hoder;
+    hoder.postion = glm::vec3(-0.5f, -0.5f, 0.0f);
+    VertexHolder hoder2;
+    hoder2.postion = glm::vec3(0.5f, -0.5f, 0.0f);
+    VertexHolder hoder3;
+    hoder3.postion = glm::vec3(0.0f, 0.5f, 0.0f);
+    std::vector<VertexHolder> vertices;
+    vertices.push_back(hoder);
+    vertices.push_back(hoder2);
+    vertices.push_back(hoder3);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    std::vector<GLuint> indices;
+    indices.push_back(0);
+    indices.push_back(1);
+    indices.push_back(2);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-    glEnableVertexAttribArray(0);
+    pBufferMgr->createBuffer(vertices, indices);
 
-    // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //glGenVertexArrays(1, &VAO);
+    //glGenBuffers(1, &VBO);
+    //// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+    //glBindVertexArray(VAO);
 
-    // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-    // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-    glBindVertexArray(0);
+    //glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    //glEnableVertexAttribArray(0);
+
+    //// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
+    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    //// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
+    //// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
+    //glBindVertexArray(0);
 }
 
 void GLWindow::drawToImGUITest()
@@ -122,15 +142,15 @@ void GLWindow::drawTest()
 {
     glViewport(0, 0, this->width, this->height);
     pShader->use();
-    glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    pBufferMgr->draw(3);
+    //glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+    //glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 void GLWindow::drawDestroyTest()
 {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-
     glDeleteFramebuffers(1, &FBO);
     glDeleteTextures(1, &texture_id);
     glDeleteRenderbuffers(1, &RBO);
@@ -138,7 +158,6 @@ void GLWindow::drawDestroyTest()
 
 void GLWindow::drawCreateFramebuffer(int window_width, int window_height)
 {
-
     if (FBO)
     {
         glDeleteFramebuffers(1, &FBO);

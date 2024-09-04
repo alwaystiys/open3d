@@ -12,6 +12,7 @@
 #include "../ui/InspectorPanel.h"
 #include "../ui/HostView.h"
 #include "../shader/Shader.h"
+#include "../render/GLBufferManager.h"
 
 class GLWindow : public IWindow
 {
@@ -47,6 +48,8 @@ private:
     std::unique_ptr<SceneView> pSceneView;
     std::unique_ptr<InspectorPanel> pInspectorPanel;
     std::unique_ptr<HostView> pHostView;
+
+    std::unique_ptr<GLVertexBufferHoder> pBufferMgr;
 
 private:
     std::unique_ptr<Shader> pShader;

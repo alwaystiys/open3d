@@ -12,13 +12,11 @@ class GLVertexBufferHoder
 {
 
 public:
-	void createBuffer(std::vector<VertexHolder>, std::vector<GLuint> indices);
+	void createBuffer(std::vector<VertexHolder>& vertices, std::vector<GLuint>& indices);
 	void deleteBuffer();
 	void bind();
 	void unbind();
-	void draw();
-
-
+	void draw(GLsizei count);
 protected:
 	GLuint mVBO;
 	GLuint mIBO;
