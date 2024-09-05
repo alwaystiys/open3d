@@ -14,4 +14,5 @@ public:
     void destroy();
 
 private:
+    double lastTime;
 };

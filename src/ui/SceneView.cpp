@@ -88,9 +88,10 @@ void SceneView::render()
     // spdlog::info("IMGUI Scene Window size: {}x{}", window_width, window_height);
 
     glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
-    // glViewport(0, 0, this->width, this->height);
-    // glViewport(0, 0, window_width, window_height);
-    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    double time = glfwGetTime();
+    //glViewport(0, 0, mWindow->width, mWindow->height);
+    glClearColor(sin(time), cos(time), 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glBindVertexArray(mVAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
     glDrawArrays(GL_TRIANGLES, 0, 3);

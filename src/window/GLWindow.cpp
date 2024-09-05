@@ -79,10 +79,13 @@ void GLWindow::drawInitTest()
 
     VertexHolder hoder;
     hoder.postion = glm::vec3(-0.5f, -0.5f, 0.0f);
+    hoder.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
     VertexHolder hoder2;
     hoder2.postion = glm::vec3(0.5f, -0.5f, 0.0f);
+    hoder2.color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
     VertexHolder hoder3;
     hoder3.postion = glm::vec3(0.0f, 0.5f, 0.0f);
+    hoder3.color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
     std::vector<VertexHolder> vertices;
     vertices.push_back(hoder);
     vertices.push_back(hoder2);
