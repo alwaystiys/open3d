@@ -12,6 +12,7 @@ class GLVertexBufferHoder
 {
 
 public:
+	GLVertexBufferHoder(): mVBO(0), mVAO(0), mIBO(0){}
 	void createBuffer(std::vector<VertexHolder>& vertices, std::vector<GLuint>& indices);
 	void deleteBuffer();
 	void bind();
@@ -28,4 +29,14 @@ protected:
  */
 class GLFrameBuffer
 {
+
+protected:
+	GLuint mFBO;
+	GLuint mTexId;
+	GLuint mDepthId;
+
+	GLint mWidth;
+	GLint mHeight;
+
+
 };
