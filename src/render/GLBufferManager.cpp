@@ -1,5 +1,8 @@
 #include "GLBufferManager.h"
 
+/*
+
+*/
 void GLVertexBufferHoder::createBuffer(std::vector<VertexHolder>& vertices, std::vector<GLuint>& indices) {
 
 	glGenVertexArrays(1, &mVAO);
@@ -50,3 +53,58 @@ void GLVertexBufferHoder::draw(GLsizei count) {
 	unbind();
 }
 
+/*
+
+*/
+void GLFrameBuffer::createBuffer(GLint width, GLint height) {
+	mWidth = width;
+	mHeight = height;
+
+	if (mFBO) {
+		deleteBuffer();
+	}
+
+	glGenFramebuffers(1, &mFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+
+	glCreateTextures(GL_TEXTURE_2D, 1, &mTexId);
+	glBindTexture(GL_TEXTURE_2D, mTexId);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+void GLFrameBuffer::deleteBuffer() {
+	if (mFBO) {
+		glDeleteFramebuffers(1, &mFBO);
+		glDeleteTextures(1, &mTexId);
+		glDeleteTextures(1, &mDepthId);
+		mTexId = 0;
+		mDepthId = 0;
+	}
+}
+
+
+void GLFrameBuffer::bind() {
+	glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+}
+
+void GLFrameBuffer::unbind() {
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+GLuint GLFrameBuffer::getTexture() {
+	return 0;
+}
